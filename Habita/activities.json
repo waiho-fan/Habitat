@@ -1,0 +1,62 @@
+[
+    {
+        "id": "1b4d9e6c-8b5f-4d3b-8e7d-c8d4b56e6db8",
+        "name": "Running",
+        "targetCount": 5,
+        "count": 3
+    },
+    {
+        "id": "c13b2f3f-5b89-4b3f-9e1d-b9c5b3e0b8d0",
+        "name": "Reading",
+        "targetCount": 10,
+        "count": 7
+    },
+    {
+        "id": "e6e1f5b3-06d1-4f8e-a6c4-6c1c5f2b0b0d",
+        "name": "Yoga",
+        "targetCount": 8,
+        "count": 5
+    },
+    {
+        "id": "0f7b2d44-2a3e-4f29-9c52-1d3bc8e9f1e5",
+        "name": "Meditation",
+        "targetCount": 12,
+        "count": 9
+    },
+    {
+        "id": "e8b4f5a8-5f7e-4b36-9b8a-5c7b4e6e3f8d",
+        "name": "Swimming",
+        "targetCount": 4,
+        "count": 2
+    },
+    {
+        "id": "c1e6d9a8-4b9c-4a6d-9f3b-7f2c6e4f1e8c",
+        "name": "Cycling",
+        "targetCount": 20,
+        "count": 15
+    },
+    {
+        "id": "ff9c8d3e-7c9f-49b4-9f6b-8d7e9a3f2e4c",
+        "name": "Cooking",
+        "targetCount": 6,
+        "count": 4
+    },
+    {
+        "id": "f7f3b2b2-3e3d-4b8c-8a8d-2b1f4e9b1c7a",
+        "name": "Gardening",
+        "targetCount": 5,
+        "count": 3
+    },
+    {
+        "id": "8e9d3a6a-1c9e-4e3f-b0f3-2e5d7f6e1b9e",
+        "name": "Painting",
+        "targetCount": 7,
+        "count": 5
+    },
+    {
+        "id": "de1c3f5a-8e2c-4e0f-9e7c-1e4c6b8b2d3f",
+        "name": "Hiking",
+        "targetCount": 10,
+        "count": 8
+    }
+]
