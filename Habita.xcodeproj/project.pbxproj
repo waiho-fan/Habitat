@@ -11,6 +11,12 @@
 		4E0D9EAF2D17AD8400C30DFF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EAE2D17AD8400C30DFF /* ContentView.swift */; };
 		4E0D9EB12D17AD8600C30DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D9EB02D17AD8600C30DFF /* Assets.xcassets */; };
 		4E0D9EB42D17AD8600C30DFF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D9EB32D17AD8600C30DFF /* Preview Assets.xcassets */; };
+		4E0D9EBB2D17AD9500C30DFF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EBA2D17AD9500C30DFF /* MainView.swift */; };
+		4E0D9EBD2D17ADA000C30DFF /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EBC2D17AD9F00C30DFF /* RewardsView.swift */; };
+		4E0D9EBF2D17ADB000C30DFF /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EBE2D17ADB000C30DFF /* AddView.swift */; };
+		4E0D9EC22D17AE2900C30DFF /* ActivityItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EC12D17AE2900C30DFF /* ActivityItem.swift */; };
+		4E0D9EC62D17B5BC00C30DFF /* activities.json in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D9EC52D17B5BC00C30DFF /* activities.json */; };
+		4E0D9EC82D17B65600C30DFF /* Bundle-Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EC72D17B65600C30DFF /* Bundle-Decodable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +25,12 @@
 		4E0D9EAE2D17AD8400C30DFF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4E0D9EB02D17AD8600C30DFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E0D9EB32D17AD8600C30DFF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4E0D9EBA2D17AD9500C30DFF /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		4E0D9EBC2D17AD9F00C30DFF /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
+		4E0D9EBE2D17ADB000C30DFF /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
+		4E0D9EC12D17AE2900C30DFF /* ActivityItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityItem.swift; sourceTree = "<group>"; };
+		4E0D9EC52D17B5BC00C30DFF /* activities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activities.json; sourceTree = "<group>"; };
+		4E0D9EC72D17B65600C30DFF /* Bundle-Decodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle-Decodable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +64,10 @@
 			isa = PBXGroup;
 			children = (
 				4E0D9EAC2D17AD8400C30DFF /* HabitaApp.swift */,
-				4E0D9EAE2D17AD8400C30DFF /* ContentView.swift */,
+				4E0D9EC52D17B5BC00C30DFF /* activities.json */,
+				4E0D9EC92D17B65900C30DFF /* Extension */,
+				4E0D9EC32D17AE3000C30DFF /* Model */,
+				4E0D9EC02D17ADBB00C30DFF /* View */,
 				4E0D9EB02D17AD8600C30DFF /* Assets.xcassets */,
 				4E0D9EB22D17AD8600C30DFF /* Preview Content */,
 			);
@@ -65,6 +80,33 @@
 				4E0D9EB32D17AD8600C30DFF /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		4E0D9EC02D17ADBB00C30DFF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4E0D9EAE2D17AD8400C30DFF /* ContentView.swift */,
+				4E0D9EBA2D17AD9500C30DFF /* MainView.swift */,
+				4E0D9EBE2D17ADB000C30DFF /* AddView.swift */,
+				4E0D9EBC2D17AD9F00C30DFF /* RewardsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4E0D9EC32D17AE3000C30DFF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4E0D9EC12D17AE2900C30DFF /* ActivityItem.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4E0D9EC92D17B65900C30DFF /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4E0D9EC72D17B65600C30DFF /* Bundle-Decodable.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,6 +169,7 @@
 			files = (
 				4E0D9EB42D17AD8600C30DFF /* Preview Assets.xcassets in Resources */,
 				4E0D9EB12D17AD8600C30DFF /* Assets.xcassets in Resources */,
+				4E0D9EC62D17B5BC00C30DFF /* activities.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +180,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E0D9EC22D17AE2900C30DFF /* ActivityItem.swift in Sources */,
 				4E0D9EAF2D17AD8400C30DFF /* ContentView.swift in Sources */,
+				4E0D9EBB2D17AD9500C30DFF /* MainView.swift in Sources */,
+				4E0D9EBF2D17ADB000C30DFF /* AddView.swift in Sources */,
 				4E0D9EAD2D17AD8400C30DFF /* HabitaApp.swift in Sources */,
+				4E0D9EC82D17B65600C30DFF /* Bundle-Decodable.swift in Sources */,
+				4E0D9EBD2D17ADA000C30DFF /* RewardsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
