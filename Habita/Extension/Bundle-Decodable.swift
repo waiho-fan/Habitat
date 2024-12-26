@@ -17,10 +17,13 @@ extension Bundle {
             fatalError("Failed to load \(file) from bundle.")
         }
         
+        // date, timezone formatter
         let decoder = JSONDecoder()
         let formatter = DateFormatter()
-        formatter.dateFormat = "y-MM-dd"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
         decoder.dateDecodingStrategy = .formatted(formatter)
+        
         do {
             return try decoder.decode(T.self, from: data)
         } catch DecodingError.keyNotFound(let key, let context) {
@@ -29,9 +32,11 @@ extension Bundle {
             fatalError("Failed to decode \(file) from bundle due to type mismatch – \(context.debugDescription)")
         } catch DecodingError.valueNotFound(let type, let context) {
             fatalError("Failed to decode \(file) from bundle due to missing \(type) value – \(context.debugDescription)")
-        } catch DecodingError.dataCorrupted(_) {
+        } catch DecodingError.dataCorrupted(let context) {
+            print("Data corrupted error: \(context.debugDescription)")
             fatalError("Failed to decode \(file) from bundle because it appears to be invalid JSON.")
         } catch {
+            print("Decoding error: \(error)")
             fatalError("Failed to decode \(file) from bundle: \(error.localizedDescription)")
         }
     }

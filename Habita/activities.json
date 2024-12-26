@@ -1,62 +1,92 @@
 [
-    {
-        "id": "1b4d9e6c-8b5f-4d3b-8e7d-c8d4b56e6db8",
-        "name": "Running",
-        "targetCount": 5,
-        "count": 3
-    },
-    {
-        "id": "c13b2f3f-5b89-4b3f-9e1d-b9c5b3e0b8d0",
-        "name": "Reading",
-        "targetCount": 10,
-        "count": 7
-    },
-    {
-        "id": "e6e1f5b3-06d1-4f8e-a6c4-6c1c5f2b0b0d",
-        "name": "Yoga",
-        "targetCount": 8,
-        "count": 5
-    },
-    {
-        "id": "0f7b2d44-2a3e-4f29-9c52-1d3bc8e9f1e5",
-        "name": "Meditation",
-        "targetCount": 12,
-        "count": 9
-    },
-    {
-        "id": "e8b4f5a8-5f7e-4b36-9b8a-5c7b4e6e3f8d",
-        "name": "Swimming",
-        "targetCount": 4,
-        "count": 2
-    },
-    {
-        "id": "c1e6d9a8-4b9c-4a6d-9f3b-7f2c6e4f1e8c",
-        "name": "Cycling",
-        "targetCount": 20,
-        "count": 15
-    },
-    {
-        "id": "ff9c8d3e-7c9f-49b4-9f6b-8d7e9a3f2e4c",
-        "name": "Cooking",
-        "targetCount": 6,
-        "count": 4
-    },
-    {
-        "id": "f7f3b2b2-3e3d-4b8c-8a8d-2b1f4e9b1c7a",
-        "name": "Gardening",
-        "targetCount": 5,
-        "count": 3
-    },
-    {
-        "id": "8e9d3a6a-1c9e-4e3f-b0f3-2e5d7f6e1b9e",
-        "name": "Painting",
-        "targetCount": 7,
-        "count": 5
-    },
-    {
-        "id": "de1c3f5a-8e2c-4e0f-9e7c-1e4c6b8b2d3f",
-        "name": "Hiking",
-        "targetCount": 10,
-        "count": 8
-    }
+  {
+    "id": "C3D394A0-0FCB-4A79-9AA9-915C4D9A5D9F",
+    "name": "Morning Run",
+    "targetCount": 10,
+    "count": 5,
+    "icon": "figure.walk",
+    "colorName": "blue",
+    "date": "2024-12-26T00:00:00Z"
+  },
+  {
+    "id": "4F5159A1-F167-4C52-9CB2-0D1E6871C101",
+    "name": "Read Book",
+    "targetCount": 20,
+    "count": 8,
+    "icon": "car",
+    "colorName": "green",
+    "date": "2024-12-26T00:00:00Z"
+  },
+  {
+    "id": "5AB22DAE-5E73-4264-B82B-9C16023C8E85",
+    "name": "Drink Water",
+    "targetCount": 8,
+    "count": 4,
+    "icon": "bicycle",
+    "colorName": "cyan",
+    "date": "2024-12-26T00:00:00Z"
+  },
+  {
+    "id": "A3A5B3D2-087D-4DAE-83F8-9CCB6449A702",
+    "name": "Meditation",
+    "targetCount": 15,
+    "count": 10,
+    "icon": "figure.run",
+    "colorName": "purple",
+    "date": "2024-12-27T00:00:00Z"
+  },
+  {
+    "id": "CB22D5B6-7E5E-40C2-A00E-2F8275DB3E43",
+    "name": "Walking",
+    "targetCount": 12,
+    "count": 7,
+    "icon": "heart.fill",
+    "colorName": "orange",
+    "date": "2024-12-27T00:00:00Z"
+  },
+  {
+    "id": "EFBD2E67-FAE9-4239-91B6-051C36F79551",
+    "name": "Yoga",
+    "targetCount": 5,
+    "count": 3,
+    "icon": "cross.fill",
+    "colorName": "pink",
+    "date": "2024-12-27T00:00:00Z"
+  },
+  {
+    "id": "3FD1B92A-7C3D-4E62-B15A-6AC9CBA7CE2E",
+    "name": "Cooking",
+    "targetCount": 6,
+    "count": 4,
+    "icon": "brain.head.profile",
+    "colorName": "red",
+    "date": "2024-12-25T00:00:00Z"
+  },
+  {
+    "id": "6B3F2990-BB79-4B69-85A3-5AE9C1E914E9",
+    "name": "Learning",
+    "targetCount": 10,
+    "count": 5,
+    "icon": "moon.stars",
+    "colorName": "teal",
+    "date": "2024-12-25T00:00:00Z"
+  },
+  {
+    "id": "E4C462B4-C8B5-4D9F-BADF-921E0D7DCDA4",
+    "name": "Cycling",
+    "targetCount": 8,
+    "count": 6,
+    "icon": "highlighter",
+    "colorName": "yellow",
+    "date": "2024-12-24T00:00:00Z"
+  },
+  {
+    "id": "F6E9724C-2C76-4743-B4C2-92E578DA6B34",
+    "name": "Gardening",
+    "targetCount": 5,
+    "count": 2,
+    "icon": "tennis.racket",
+    "colorName": "brown",
+    "date": "2024-12-23T00:00:00Z"
+  }
 ]
