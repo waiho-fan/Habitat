@@ -66,29 +66,62 @@ struct MainView: View {
     @State private var showAddView = false
     @State private var selectedActivity: ActivityItem?
     @State private var selectedDate: Date = Date()
+    @State private var showDatePicker = false
+    private let calendar = Calendar.current
+    @State private var dateRange: [Date] = []
+    
+    init() {
+        let initialDate = Date()
+        let calendar = Calendar.current
+        
+        var initialDates: [Date] = []
+        for dayOffset in -3...3 {
+            if let date = calendar.date(byAdding: .day, value: dayOffset, to: initialDate) {
+                initialDates.append(date)
+            }
+        }
+        
+        _selectedDate = State(initialValue: initialDate)
+        _dateRange = State(initialValue: initialDates)
+    }
 
     var body: some View {
         NavigationStack {
-            DateSelectionView(selectedDate: $selectedDate)
-            
-            ScrollView {
-//                ListLayout(items: filteredItems, selectedActivity: $selectedActivity)
-                ListLayout(items: $activities.items, selectedActivity: $selectedActivity, selectedDate: selectedDate)
-                    .navigationTitle("Habitat")
-                    .sheet(isPresented: $showAddView) {
-                        AddView(activities: activities)
-                    }
-                    .toolbar {
-                        Button {
-                            showAddView = true
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundColor(.primary)
-                        }
-                    }
+            VStack(spacing: 0) {
+                DateSelectionView(selectedDate: $selectedDate, dateRange: $dateRange)
+                ListLayout(
+                    items: $activities.items,
+                    selectedActivity: $selectedActivity,
+                    selectedDate: selectedDate)
+            }
+            .navigationTitle("Habitat")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showAddView) {
+                AddView(activities: activities)
+            }
+            .toolbar {
+                Button {
+                    showDatePicker = true
+                } label: {
+                    Image(systemName: "calendar")
+                }
+                .foregroundStyle(.primary)
+                
+                Button {
+                    showAddView = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .foregroundStyle(.primary)
+
             }
         }
         .blur(radius: selectedActivity != nil ? 5 : 0)
+        .sheet(isPresented: $showDatePicker) {
+            DatePickerSheet(selectedDate: $selectedDate, showDatePicker: $showDatePicker) { selectedDate in
+                updateDateRange(around: selectedDate)
+            }
+        }
         .overlay(
             Group {
                 if let activity = selectedActivity {
@@ -96,14 +129,19 @@ struct MainView: View {
                 }
             }
         )
+        .onAppear {
+            updateDateRange(around: selectedDate)
+        }
     }
     
-    func removeItems(list: [ActivityItem], at offsets: IndexSet) {
-        for offset in offsets {
-            if let index = activities.items.firstIndex(of: list[offset]) {
-                activities.items.remove(at: index)
+    private func updateDateRange(around date: Date) {
+        var newDates: [Date] = []
+        for dayOffset in -3...3 {
+            if let newDate = calendar.date(byAdding: .day, value: dayOffset, to: date) {
+                newDates.append(newDate)
             }
         }
+        dateRange = newDates
     }
 }
 
@@ -121,10 +159,10 @@ struct ListLayout: View {
     }
     
     var body: some View {
-        LazyVStack(alignment: .leading) {
+        //        LazyVStack(alignment: .leading) {
+        List{
             let filteredItems = items.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
             ForEach(filteredItems.indices, id: \.self) { index in
-                // 不需要使用 `$` 前綴
                 ActivityRow(activityItem: Binding(
                     get: { filteredItems[index] },
                     set: { newValue in
@@ -133,19 +171,34 @@ struct ListLayout: View {
                             items[originalIndex] = newValue
                         }
                     }
-                ))
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            selectedActivity = filteredItems[index]
-                        }
+                ), onEdit: {
+                    print("Edit item at index \(index)")
+                }, onDelete: {
+                    if let originalIndex = items.firstIndex(where: { $0.id == filteredItems[index].id }) {
+                        items.remove(at: originalIndex)
                     }
+                })
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                //                .contentShape(Rectangle())  // 確保整個區域可點擊
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        selectedActivity = filteredItems[index]
+                    }
+                }
             }
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)  // 隱藏背景
+        .background(Color.clear)  // 確保背景透明
     }
 }
 
 struct ActivityRow: View {
     @Binding var activityItem: ActivityItem
+    var onEdit: () -> Void
+    var onDelete: () -> Void
     
     var body: some View {
         ZStack {
@@ -177,12 +230,31 @@ struct ActivityRow: View {
                         .font(.title2)
                         .foregroundColor(.primary)
                 }
+                .buttonStyle(BorderlessButtonStyle())
                 .padding(.trailing)
             }
         }
         .frame(maxWidth: .infinity)
         .frame(height: 70)
-
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button(role: .destructive, action: onDelete) {
+                Label("Remove", systemImage: "trash")
+            }
+            Button(action: onDelete) {
+                Label("Edit", systemImage: "pencil")
+            }
+            .tint(.orange)
+        }
+        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+            Button(action: {
+                withAnimation {
+                    activityItem.count = activityItem.targetCount
+                }
+            }) {
+                Label("Done", systemImage: "checkmark")
+            }
+            .tint(.green)
+        }
     }
 }
 
@@ -229,11 +301,13 @@ struct CirclePopupProgressView: View {
                 .stroke(Color.gray.opacity(0.3), lineWidth: 10) // 背景圓
             Circle()
                 .trim(from: 0, to: animatedProgress)
-                .stroke(activityItem.isDone ? Color.green : Color.blue,
+                .stroke(activityItem.isDone ? Color.green : activityItem.color,
                         style: StrokeStyle(lineWidth: 10, lineCap: .round))
                 .rotationEffect(.degrees(-90)) // 旋轉 -90 度讓進度從頂部開始
                 .animation(.easeOut(duration:  Double(activityItem.progress)), value: animatedProgress)
             VStack(alignment: .center) {
+                Image(systemName: activityItem.icon)
+                    .font(.largeTitle)
                 Text(activityItem.name)
                     .font(.headline.bold())
                     .foregroundStyle(.primary)
@@ -265,49 +339,27 @@ struct CirclePopupProgressView: View {
 }
 
 struct DateSelectionView: View {
-    @Binding var selectedDate: Date    // 綁定選中的日期
-    private let calendar = Calendar.current    // 使用設備的日曆設定
-    @State private var dateRange: [Date]    // 儲存要顯示的日期範圍
-    @State private var showDatePicker = false
-    
-    init(selectedDate: Binding<Date>) {
-        self._selectedDate = selectedDate
-        
-        let today = Date()
-        var dates: [Date] = []
-        
-        for dayOffset in -3...3{
-            if let date = calendar.date(byAdding: .day, value: dayOffset, to: today) {
-                dates.append(date)
-            }
-        }
-//        self.dateRange = dates
-        self._dateRange = State(initialValue: dates)
-    }
-    
-    private func updateDateRange(around date: Date) {
-        var newDates: [Date] = []
-        for dayOffset in -3...3 {
-            if let newDate = calendar.date(byAdding: .day, value: dayOffset, to: date) {
-                newDates.append(newDate)
-            }
-        }
-        dateRange = newDates
-    }
+    @Binding var selectedDate: Date
+    @Binding var dateRange: [Date]
+    private let calendar = Calendar.current
+
+//    init(selectedDate: Binding<Date>, dateRange: Binding<[Date]>) {
+//        self._selectedDate = selectedDate
+//        
+//        let today = Date()
+//        var dates: [Date] = []
+//        
+//        for dayOffset in -3...3{
+//            if let date = calendar.date(byAdding: .day, value: dayOffset, to: today) {
+//                dates.append(date)
+//            }
+//        }
+////        self._dateRange = State(initialValue: dates)
+//        self._dateRange = dateRange
+//    }
     
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                Button {
-                    showDatePicker = true
-                } label: {
-                    Image(systemName: "calendar")
-                        .padding(.trailing)
-                }
-                .foregroundStyle(.primary)
-            }
-            
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
@@ -328,21 +380,14 @@ struct DateSelectionView: View {
                     proxy.scrollTo(Date(), anchor: .center)
                 }
                 .onChange(of: selectedDate) { oldDate, newDate in
-                    // 當選擇新日期時更新日期範圍
                     withAnimation {
-                        updateDateRange(around: newDate)
-                        // 滾動到選中的日期
                         proxy.scrollTo(newDate, anchor: .center)
                     }
                 }
                 .padding(.vertical)
             }
         }
-        .sheet(isPresented: $showDatePicker) {
-            DatePickerSheet(selectedDate: $selectedDate, showDatePicker: $showDatePicker) { selectedDate in
-                updateDateRange(around: selectedDate)
-            }
-        }
+
     }
 }
 
