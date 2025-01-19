@@ -12,6 +12,11 @@ Habitat is a SwiftUI habit-tracking app that allows users to monitor their activ
 - Track completion counts for each activity.
 - Data persistence using Codable and UserDefaults.
 
+## Screenshots
+<img src="Habita/Assets.xcassets/screenshots01.imageset/screenshots01.png" alt="Screenshot 01" width="300">
+<img src="Habita/Assets.xcassets/screenshots02.imageset/screenshots02.png" alt="Screenshot 02" width="300">
+<img src="Habita/Assets.xcassets/screenshots03.imageset/screenshots03.png" alt="Screenshot 03" width="300">
+
 ## Getting Started
 
 1. Clone the repository:
