@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E0151DB2D3F42A900E1FAB4 /* SFSymbolsPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 4E0151DA2D3F42A900E1FAB4 /* SFSymbolsPicker */; };
 		4E0D9EAD2D17AD8400C30DFF /* HabitaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EAC2D17AD8400C30DFF /* HabitaApp.swift */; };
 		4E0D9EAF2D17AD8400C30DFF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0D9EAE2D17AD8400C30DFF /* ContentView.swift */; };
 		4E0D9EB12D17AD8600C30DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D9EB02D17AD8600C30DFF /* Assets.xcassets */; };
@@ -25,7 +26,6 @@
 		4EEF203E2D3DE7B4000846AA /* screenshot02.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EEF20382D3DE7B4000846AA /* screenshot02.png */; };
 		4EEF203F2D3DE7B4000846AA /* screenshot01.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EEF20392D3DE7B4000846AA /* screenshot01.png */; };
 		4EEF20402D3DE7B4000846AA /* screenshot04.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EEF203A2D3DE7B4000846AA /* screenshot04.png */; };
-		4EF9A2982D24F2FB00F5E926 /* TabbedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF9A2972D24F2FB00F5E926 /* TabbedItems.swift */; };
 		4EF9A29A2D24F4D800F5E926 /* MainTabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF9A2992D24F4D800F5E926 /* MainTabbedView.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,7 +49,6 @@
 		4EEF20382D3DE7B4000846AA /* screenshot02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot02.png; sourceTree = "<group>"; };
 		4EEF20392D3DE7B4000846AA /* screenshot01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot01.png; sourceTree = "<group>"; };
 		4EEF203A2D3DE7B4000846AA /* screenshot04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot04.png; sourceTree = "<group>"; };
-		4EF9A2972D24F2FB00F5E926 /* TabbedItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedItems.swift; sourceTree = "<group>"; };
 		4EF9A2992D24F4D800F5E926 /* MainTabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabbedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,12 +57,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E0151DB2D3F42A900E1FAB4 /* SFSymbolsPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E0151DC2D3F43F700E1FAB4 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				4E3258D02D1F0C6C00D4DB55 /* ViewMode.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
 		4E0D9EA02D17AD8400C30DFF = {
 			isa = PBXGroup;
 			children = (
@@ -85,9 +93,8 @@
 			children = (
 				4E0D9EAC2D17AD8400C30DFF /* HabitaApp.swift */,
 				4E0D9EC52D17B5BC00C30DFF /* activities.json */,
-				4E3258D02D1F0C6C00D4DB55 /* ViewMode.swift */,
-				4EF9A2972D24F2FB00F5E926 /* TabbedItems.swift */,
 				4E5125082D26369D00CE9999 /* HabitTracker.swift */,
+				4E0151DC2D3F43F700E1FAB4 /* Enum */,
 				4E0D9EC92D17B65900C30DFF /* Extension */,
 				4E0D9EC32D17AE3000C30DFF /* Model */,
 				4E0D9EC02D17ADBB00C30DFF /* View */,
@@ -163,6 +170,9 @@
 			dependencies = (
 			);
 			name = Habita;
+			packageProductDependencies = (
+				4E0151DA2D3F42A900E1FAB4 /* SFSymbolsPicker */,
+			);
 			productName = Habita;
 			productReference = 4E0D9EA92D17AD8400C30DFF /* Habita.app */;
 			productType = "com.apple.product-type.application";
@@ -191,6 +201,9 @@
 				Base,
 			);
 			mainGroup = 4E0D9EA02D17AD8400C30DFF;
+			packageReferences = (
+				4E0151D92D3F42A900E1FAB4 /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */,
+			);
 			productRefGroup = 4E0D9EAA2D17AD8400C30DFF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -227,7 +240,6 @@
 				4E3258D12D1F0C6C00D4DB55 /* ViewMode.swift in Sources */,
 				4E5125092D26369D00CE9999 /* HabitTracker.swift in Sources */,
 				4E0D9EC22D17AE2900C30DFF /* ActivityItem.swift in Sources */,
-				4EF9A2982D24F2FB00F5E926 /* TabbedItems.swift in Sources */,
 				4E0D9EAF2D17AD8400C30DFF /* ContentView.swift in Sources */,
 				4E0D9EBB2D17AD9500C30DFF /* MainView.swift in Sources */,
 				4E0D9EBF2D17ADB000C30DFF /* AddView.swift in Sources */,
@@ -440,6 +452,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4E0151D92D3F42A900E1FAB4 /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alessiorubicini/SFSymbolsPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4E0151DA2D3F42A900E1FAB4 /* SFSymbolsPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E0151D92D3F42A900E1FAB4 /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */;
+			productName = SFSymbolsPicker;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4E0D9EA12D17AD8400C30DFF /* Project object */;
 }

@@ -1,14 +1,14 @@
 //
-//  TabbedItems.swift
+//  ViewMode.swift
 //  Habita
 //
-//  Created by Gary on 1/1/2025.
+//  Created by Gary on 28/12/2024.
 //
 
 import Foundation
 
-enum TabbedItems: Int, CaseIterable{
-    case all = 0
+enum ViewMode: CaseIterable {
+    case all
     case todo
     
     var title: String{
@@ -29,3 +29,4 @@ enum TabbedItems: Int, CaseIterable{
         }
     }
 }
+

@@ -53,8 +53,8 @@ class Activities: Codable {
             if let decoded = try? JSONDecoder().decode([ActivityItem].self, from: savedItems) {
                 print("loadItems - items \(decoded.count)")
                 // test data
-//                return Bundle.main.decode("activities.json")
-                return decoded
+                return Bundle.main.decode("activities.json")
+//                return decoded
             }
         }
         return []
@@ -69,6 +69,8 @@ struct MainView: View {
     @State private var showDatePicker = false
     private let calendar = Calendar.current
     @State private var dateRange: [Date] = []
+    @State private var viewMode: ViewMode = .all
+    @State var selectedTab = 0
     
     init() {
         let initialDate = Date()
@@ -89,10 +91,16 @@ struct MainView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 DateSelectionView(selectedDate: $selectedDate, dateRange: $dateRange)
+                
                 ListLayout(
                     items: $activities.items,
                     selectedActivity: $selectedActivity,
-                    selectedDate: selectedDate)
+                    selectedDate: selectedDate,
+                    viewMode: viewMode)
+                
+//                ListToggleView(viewMode: $viewMode)
+//                                    .padding(.vertical, 8)
+                TabView(viewMode: $viewMode)
             }
             .navigationTitle("Habitat")
             .navigationBarTitleDisplayMode(.inline)
@@ -150,74 +158,103 @@ struct ListLayout: View {
     @Binding var items: [ActivityItem]
     @Binding var selectedActivity: ActivityItem?
     let selectedDate: Date
+    let viewMode: ViewMode
     
-    init(items: Binding<[ActivityItem]>, selectedActivity: Binding<ActivityItem?>, selectedDate: Date) {
+    init(items: Binding<[ActivityItem]>, selectedActivity: Binding<ActivityItem?>, selectedDate: Date, viewMode: ViewMode) {
         self._items = items
         self._selectedActivity = selectedActivity
         self._showingActivity = State(initialValue: Array(repeating: false, count: items.wrappedValue.count))
         self.selectedDate = selectedDate
+        self.viewMode = viewMode
     }
     
     var body: some View {
         //        LazyVStack(alignment: .leading) {
-        List{
+        List {
             let filteredItems = items.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
-            ForEach(filteredItems.indices, id: \.self) { index in
-                ActivityRow(activityItem: Binding(
-                    get: { filteredItems[index] },
-                    set: { newValue in
-                        // 在原始 items 中找到並更新對應項目
-                        if let originalIndex = items.firstIndex(where: { $0.id == newValue.id }) {
-                            items[originalIndex] = newValue
-                        }
-                    }
-                ), onEdit: {
-                    print("Edit item at index \(index)")
-                }, onDelete: {
-                    if let originalIndex = items.firstIndex(where: { $0.id == filteredItems[index].id }) {
-                        items.remove(at: originalIndex)
-                    }
-                })
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                //                .contentShape(Rectangle())  // 確保整個區域可點擊
-                .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        selectedActivity = filteredItems[index]
-                    }
+            let todoItems = items.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) && !$0.isDone }
+            let doneItems = items.filter { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) && $0.isDone }
+            
+            switch viewMode {
+            case .all:
+                Section("ALL") {
+                    displayItems(filteredItems)
+                }
+            case .todo:
+                Section("Section") {
+                    displayItems(todoItems)
                 }
             }
         }
         .listStyle(.plain)
-        .scrollContentBackground(.hidden)  // 隱藏背景
-        .background(Color.clear)  // 確保背景透明
+        .scrollContentBackground(.hidden)
+        .background(Color.clear)
+    }
+    
+    func displayItems(_ filteredItems: [ActivityItem]) -> some View {
+        ForEach(filteredItems.indices, id: \.self) { index in
+            ActivityRow(activityItem: Binding(
+                get: { filteredItems[index] },
+                set: { newValue in
+                    if let originalIndex = items.firstIndex(where: { $0.id == newValue.id }) {
+                        items[originalIndex] = newValue
+                    }
+                }
+            ), onEdit: {
+                print("Edit item at index \(index)")
+            }, onDelete: {
+                if let originalIndex = items.firstIndex(where: { $0.id == filteredItems[index].id }) {
+                    items.remove(at: originalIndex)
+                }
+            })
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+            //                .contentShape(Rectangle())  // 確保整個區域可點擊
+            .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    selectedActivity = filteredItems[index]
+                }
+            }
+        }
     }
 }
 
 struct ActivityRow: View {
     @Binding var activityItem: ActivityItem
+    @State private var showFlash = false
     var onEdit: () -> Void
     var onDelete: () -> Void
     
     var body: some View {
         ZStack {
-            Color.white.opacity(0.1)
-                .clipShape(RoundedRectangle(cornerRadius: 20.0))
-                .overlay (
+            RoundedRectangle(cornerRadius: 20.0)
+                .fill(Color.white.opacity(0.1))
+                .overlay(
                     RoundedRectangle(cornerRadius: 20.0)
                         .stroke(activityItem.color.opacity(0.3), lineWidth: 2.0)
                 )
+            
+            // 閃光效果層
+            FlashEffect(isActive: showFlash, activityItem: activityItem)
+                .mask(RoundedRectangle(cornerRadius: 20.0))
+                .animation(
+                    .linear(duration: 1),
+                    value: showFlash
+                )
+            
             HStack {
                 CircleProgressView(activityItem: activityItem)
                 
                 VStack(alignment: .leading) {
                     Text(activityItem.name)
-                        .font(.headline.bold())
+                        .font(.body.bold())
+                        .fontWeight(.medium)
                         .foregroundStyle(.primary)
-                    Text("\(activityItem.count) / \(activityItem.targetCount)")
+                    Text("\(activityItem.count) / \(activityItem.targetCount) TIMES")
                         .font(.subheadline)
-                        .foregroundStyle(.primary)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primaryBlack40)
                 }
                 Spacer()
 
@@ -236,24 +273,34 @@ struct ActivityRow: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 70)
-        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            Button(role: .destructive, action: onDelete) {
+        .contextMenu {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
                 Label("Remove", systemImage: "trash")
             }
-            Button(action: onDelete) {
+            
+            Button {
+                onEdit()
+            } label: {
                 Label("Edit", systemImage: "pencil")
             }
-            .tint(.orange)
-        }
-        .swipeActions(edge: .leading, allowsFullSwipe: true) {
-            Button(action: {
+            
+            Button {
                 withAnimation {
                     activityItem.count = activityItem.targetCount
                 }
-            }) {
-                Label("Done", systemImage: "checkmark")
+            } label: {
+                Label("Done", systemImage: "checkmark.circle")
             }
-            .tint(.green)
+        }
+        .onChange(of: activityItem.isDone) { _, isDone in
+            if isDone {
+                showFlash = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    showFlash = false
+                }
+            }
         }
     }
 }
@@ -342,22 +389,7 @@ struct DateSelectionView: View {
     @Binding var selectedDate: Date
     @Binding var dateRange: [Date]
     private let calendar = Calendar.current
-
-//    init(selectedDate: Binding<Date>, dateRange: Binding<[Date]>) {
-//        self._selectedDate = selectedDate
-//        
-//        let today = Date()
-//        var dates: [Date] = []
-//        
-//        for dayOffset in -3...3{
-//            if let date = calendar.date(byAdding: .day, value: dayOffset, to: today) {
-//                dates.append(date)
-//            }
-//        }
-////        self._dateRange = State(initialValue: dates)
-//        self._dateRange = dateRange
-//    }
-    
+   
     var body: some View {
         VStack {
             ScrollViewReader { proxy in
@@ -468,7 +500,114 @@ struct DateCell: View {
     }
 }
 
+struct FlashEffect: View {
+    var isActive: Bool
+    let activityItem: ActivityItem
+    
+    var body: some View {
+        GeometryReader { geometry in
+            let width = geometry.size.width
+//            let height = geometry.size.height
+//            let frame = geometry.frame(in: .local)
+
+            return LinearGradient(
+                gradient: Gradient(colors: [
+                    activityItem.color.opacity(0.2),
+                    activityItem.color.opacity(0.1),
+                    .clear,
+                    .clear
+                ]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: width * 2)
+            .opacity(isActive ? 1 : 0)
+            .offset(x: isActive ? width : -width)
+            .scaleEffect(isActive ? 1.01 : 1)
+            .onAppear {
+                print("Initial offset: \(isActive ? width : -width)")
+            }
+            .onChange(of: isActive) { _, newValue in
+                print("isActive \(isActive), Offset changed to: \(newValue ? width : -width)")
+            }
+        }
+    }
+}
+
+// MARK: TabView
+struct ListToggleView: View {
+    @Binding var viewMode: ViewMode
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            // 全部列表按鈕
+            Toggle(viewMode: .all)
+            
+            // 分類列表按鈕
+            Toggle(viewMode: .todo)
+        }
+        .padding(.horizontal, 16)
+        .frame(height: 44)
+        .background(Color(.systemGray6))
+        .cornerRadius(22)
+        .padding(.horizontal)
+    }
+    
+    // 內部的 Toggle 按鈕視圖
+    @ViewBuilder
+    private func Toggle(viewMode toggleMode: ViewMode) -> some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                viewMode = toggleMode
+            }
+        } label: {
+            Text(toggleMode == .all ? "All List" : "Sections")
+                .font(.system(.body, design: .rounded))
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity)
+                .frame(height: 36)
+                .background(
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(viewMode == toggleMode ?
+                             Color(.systemBackground) :
+                             Color.clear)
+                        .shadow(color: .black.opacity(0.1),
+                               radius: viewMode == toggleMode ? 2 : 0)
+                )
+                .foregroundColor(viewMode == toggleMode ?
+                               .primary :
+                               .secondary)
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 4)
+    }
+}
+
+
 #Preview {
     MainView()
-        .preferredColorScheme(.light)
+        .preferredColorScheme(.dark)
+}
+
+struct TabView: View {
+    @Binding var viewMode: ViewMode
+
+    var body: some View {
+        ZStack{
+            HStack{
+                ForEach((ViewMode.allCases), id: \.self){ item in
+                    Button{
+                        viewMode = item
+                    } label: {
+                        CustomTabItem(imageName: item.iconName, title: item.title, isActive: (viewMode == item))
+                    }
+                }
+            }
+            .padding(6)
+        }
+        .frame(height: 70)
+        .background(.primary.opacity(0.2))
+        .cornerRadius(35)
+        .padding(.horizontal, 26)
+    }
 }
